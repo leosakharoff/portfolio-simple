@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Show a media item (image or video)
-    function showMediaItem(mediaPath, altText) {
+    function showMediaItem(mediaPath, altText, callback) {
         if (isVideoFile(mediaPath)) {
             // Show video, hide image
             popupVideo.src = mediaPath;
@@ -138,14 +138,33 @@ document.addEventListener('DOMContentLoaded', () => {
             popupImage.style.display = 'none';
             // Autoplay muted
             popupVideo.play().catch(err => console.log('Autoplay prevented:', err));
+            if (callback) callback();
         } else {
-            // Show image, hide video
-            popupVideo.pause();
-            popupVideo.src = '';
-            popupVideo.style.display = 'none';
-            popupImage.src = mediaPath;
-            popupImage.alt = altText || '';
-            popupImage.style.display = 'block';
+            // Preload image before showing to prevent flash
+            const img = new Image();
+            img.onload = () => {
+                // Hide video
+                popupVideo.pause();
+                popupVideo.src = '';
+                popupVideo.style.display = 'none';
+                // Show preloaded image
+                popupImage.src = mediaPath;
+                popupImage.alt = altText || '';
+                popupImage.style.display = 'block';
+                if (callback) callback();
+            };
+            img.onerror = () => {
+                // Even on error, try to show it
+                popupVideo.pause();
+                popupVideo.src = '';
+                popupVideo.style.display = 'none';
+                popupImage.src = mediaPath;
+                popupImage.alt = altText || '';
+                popupImage.style.display = 'block';
+                if (callback) callback();
+            };
+            // Start loading
+            img.src = mediaPath;
         }
     }
 
