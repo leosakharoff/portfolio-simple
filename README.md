@@ -2,6 +2,8 @@
 
 Minimal portfolio website with programmer aesthetic. Monospace typography, clean HTML/CSS, no frameworks.
 
+<img width="1792" height="996" alt="Screenshot 2026-01-02 at 23 15 23" src="https://github.com/user-attachments/assets/c1909d82-6c5c-404c-a142-1b41cb14a816" />
+
 ## Structure
 
 ```
