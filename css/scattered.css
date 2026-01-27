@@ -727,9 +727,9 @@ body {
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .site-header {
-        flex-direction: column;
-        gap: 4px;
-        align-items: flex-start;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
         padding: 12px 15px;
     }
 
@@ -754,8 +754,8 @@ body {
 
     .header-nav {
         display: flex;
-        gap: 12px;
-        font-size: 11px;
+        gap: 10px;
+        font-size: 10px;
     }
 
     .project-word {
