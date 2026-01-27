@@ -784,6 +784,15 @@ body {
         height: auto !important;
     }
 
+    .site-header {
+        margin: 10px !important;
+        padding: 10px 12px !important;
+        border: 1px solid #ccc !important;
+        background: var(--bg) !important;
+        width: calc(100% - 20px) !important;
+        box-sizing: border-box !important;
+    }
+
     .header-video {
         display: none !important;
     }
