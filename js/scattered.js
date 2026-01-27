@@ -68,12 +68,163 @@ document.addEventListener('DOMContentLoaded', () => {
     const miniAudioProgressBar = document.getElementById('miniAudioProgressBar');
     const miniAudioClose = document.getElementById('miniAudioClose');
 
-    // Fetch audio manifest on load
+    // Volume control elements
+    const audioVolumeBtn = document.getElementById('audioVolumeBtn');
+    const audioVolume = document.getElementById('audioVolume');
+    const audioVolumeBar = document.getElementById('audioVolumeBar');
+    const miniAudioVolumeBtn = document.getElementById('miniAudioVolumeBtn');
+    const miniAudioVolume = document.getElementById('miniAudioVolume');
+    const miniAudioVolumeBar = document.getElementById('miniAudioVolumeBar');
+
+    // Volume state
+    const VOLUME_KEY = 'portfolio_audio_volume';
+    let savedVolume = parseFloat(localStorage.getItem(VOLUME_KEY)) || 1;
+    let isMuted = false;
+
+    // Audio normalization using Web Audio API
+    let audioContext = null;
+    let sourceNode = null;
+    let compressorNode = null;
+    let gainNode = null;
+    let audioNormalized = false;
+
+    function initAudioNormalization() {
+        if (audioNormalized) return;
+
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+            // Resume context if suspended (required after user interaction)
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+
+            // Create source from audio element
+            sourceNode = audioContext.createMediaElementSource(audioElement);
+
+            // Create compressor for normalization/limiting
+            compressorNode = audioContext.createDynamicsCompressor();
+            compressorNode.threshold.setValueAtTime(-24, audioContext.currentTime); // Start compressing at -24dB
+            compressorNode.knee.setValueAtTime(30, audioContext.currentTime); // Soft knee
+            compressorNode.ratio.setValueAtTime(12, audioContext.currentTime); // High ratio for limiting
+            compressorNode.attack.setValueAtTime(0.003, audioContext.currentTime); // Fast attack
+            compressorNode.release.setValueAtTime(0.25, audioContext.currentTime); // Medium release
+
+            // Create gain node for makeup gain
+            gainNode = audioContext.createGain();
+            gainNode.gain.setValueAtTime(1.5, audioContext.currentTime); // Boost to compensate for compression
+
+            // Connect: source -> compressor -> gain -> destination
+            sourceNode.connect(compressorNode);
+            compressorNode.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            audioNormalized = true;
+            console.log('Audio normalization initialized');
+        } catch (err) {
+            console.log('Audio normalization not available:', err);
+            // If normalization fails, ensure audio still plays normally
+            audioNormalized = true; // Prevent retrying
+        }
+    }
+
+    // Audio state persistence keys
+    const AUDIO_STATE_KEY = 'portfolio_audio_state';
+
+    // Save audio state to localStorage
+    function saveAudioState() {
+        if (!audioElement.src) return;
+        const state = {
+            src: audioElement.src,
+            currentTime: audioElement.currentTime,
+            trackName: audioTracks[currentTrackIndex]?.name || 'Unknown',
+            tracks: audioTracks,
+            trackIndex: currentTrackIndex,
+            isPlaying: !audioElement.paused,
+            timestamp: Date.now()
+        };
+        localStorage.setItem(AUDIO_STATE_KEY, JSON.stringify(state));
+    }
+
+    // Load audio state from localStorage
+    function loadAudioState() {
+        const saved = localStorage.getItem(AUDIO_STATE_KEY);
+        if (!saved) return null;
+        try {
+            const state = JSON.parse(saved);
+            // Only restore if saved within last 24 hours
+            if (Date.now() - state.timestamp > 24 * 60 * 60 * 1000) {
+                localStorage.removeItem(AUDIO_STATE_KEY);
+                return null;
+            }
+            return state;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    // Fetch audio manifest on load and restore/autoplay
     fetch('js/project-audio.json')
         .then(response => response.json())
         .then(data => {
             projectAudioManifest = data;
             console.log('Project audio manifest loaded');
+
+            // Check for saved audio state first
+            const savedState = loadAudioState();
+
+            if (savedState && savedState.src) {
+                // Restore previous session
+                audioTracks = savedState.tracks || [];
+                currentTrackIndex = savedState.trackIndex || 0;
+
+                const restoreAudio = () => {
+                    audioElement.src = savedState.src;
+                    audioElement.currentTime = savedState.currentTime || 0;
+
+                    if (savedState.isPlaying) {
+                        audioElement.play().then(() => {
+                            miniAudioTrack.textContent = savedState.trackName;
+                            miniAudioPlayer.classList.add('visible');
+                            miniAudioPlayPause.textContent = '[⏸]';
+                        }).catch(err => {
+                            console.log('Autoplay blocked, waiting for interaction:', err);
+                            // Show mini player anyway so user can click play
+                            miniAudioTrack.textContent = savedState.trackName;
+                            miniAudioPlayer.classList.add('visible');
+                            miniAudioPlayPause.textContent = '[▶]';
+                        });
+                    } else {
+                        // Just load the track but don't play
+                        miniAudioTrack.textContent = savedState.trackName;
+                        miniAudioPlayer.classList.add('visible');
+                        miniAudioPlayPause.textContent = '[▶]';
+                    }
+                    document.removeEventListener('click', restoreAudio);
+                };
+
+                // Try to restore immediately, fall back to user interaction
+                restoreAudio();
+            } else {
+                // No saved state - autoplay Kremnitze on first user interaction
+                const autoplayTrack = {
+                    name: 'Kremnitze',
+                    path: 'https://media.leosakharoff.com/audio/ambient-electroacustic/Kremnitze.wav'
+                };
+
+                const startAutoplay = () => {
+                    audioTracks = [autoplayTrack];
+                    currentTrackIndex = 0;
+                    audioElement.src = autoplayTrack.path;
+                    audioElement.play().then(() => {
+                        miniAudioTrack.textContent = autoplayTrack.name;
+                        miniAudioPlayer.classList.add('visible');
+                        miniAudioPlayPause.textContent = '[⏸]';
+                    }).catch(err => console.log('Autoplay blocked:', err));
+                    document.removeEventListener('click', startAutoplay);
+                };
+                document.addEventListener('click', startAutoplay, { once: true });
+            }
         })
         .catch(err => console.error('Failed to load project audio manifest:', err));
 
@@ -718,6 +869,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Space bar for play/pause
+        if (e.key === ' ' || e.code === 'Space') {
+            // Don't trigger if typing in an input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            e.preventDefault();
+            if (audioElement.paused) {
+                if (!audioElement.src && audioTracks.length > 0) {
+                    loadAndPlayTrack(0);
+                } else {
+                    audioElement.play();
+                }
+            } else {
+                audioElement.pause();
+            }
+        }
+
         // Arrow keys for gallery navigation
         if (isPopupVisible && galleryImages.length > 1) {
             if (e.key === 'ArrowLeft') {
@@ -800,7 +967,7 @@ document.addEventListener('DOMContentLoaded', () => {
         audioElement.src = track.path;
         audioElement.play();
         updateTrackListHighlight();
-        audioPlayPause.textContent = '⏸';
+        audioPlayPause.textContent = '[⏸]';
 
         // Show and update mini player
         showMiniPlayer(track.name);
@@ -811,7 +978,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (miniAudioPlayer) {
             miniAudioTrack.textContent = trackName || 'Unknown track';
             miniAudioPlayer.classList.add('visible');
-            miniAudioPlayPause.textContent = '⏸';
+            miniAudioPlayPause.textContent = '[⏸]';
         }
     }
 
@@ -851,10 +1018,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     audioElement.play();
                 }
-                audioPlayPause.textContent = '⏸';
+                audioPlayPause.textContent = '[⏸]';
             } else {
                 audioElement.pause();
-                audioPlayPause.textContent = '▶';
+                audioPlayPause.textContent = '[▶]';
             }
         });
     }
@@ -880,6 +1047,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (audioElement) {
+        let lastSaveTime = 0;
         audioElement.addEventListener('timeupdate', () => {
             const progress = (audioElement.currentTime / audioElement.duration) * 100;
             audioProgressBar.style.width = `${progress}%`;
@@ -887,6 +1055,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update mini player progress bar too
             if (miniAudioProgressBar) {
                 miniAudioProgressBar.style.width = `${progress}%`;
+            }
+            // Save state every 2 seconds to avoid excessive writes
+            const now = Date.now();
+            if (now - lastSaveTime > 2000) {
+                saveAudioState();
+                lastSaveTime = now;
             }
         });
 
@@ -901,20 +1075,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         audioElement.addEventListener('pause', () => {
-            audioPlayPause.textContent = '▶';
-            if (miniAudioPlayPause) miniAudioPlayPause.textContent = '▶';
+            audioPlayPause.textContent = '[▶]';
+            if (miniAudioPlayPause) miniAudioPlayPause.textContent = '[▶]';
+            saveAudioState();
         });
 
         audioElement.addEventListener('play', () => {
-            audioPlayPause.textContent = '⏸';
-            if (miniAudioPlayPause) miniAudioPlayPause.textContent = '⏸';
+            audioPlayPause.textContent = '[⏸]';
+            if (miniAudioPlayPause) miniAudioPlayPause.textContent = '[⏸]';
             // Ensure mini player is visible when playing
             if (miniAudioPlayer && audioTracks.length > 0) {
                 miniAudioPlayer.classList.add('visible');
                 updateMiniPlayerTrack();
             }
+            saveAudioState();
+            // Audio normalization disabled - causes issues with MediaElementSource
+            // initAudioNormalization();
         });
     }
+
+    // Save state before page unload
+    window.addEventListener('beforeunload', () => {
+        saveAudioState();
+    });
 
     if (audioProgress) {
         audioProgress.addEventListener('click', (e) => {
@@ -981,6 +1164,92 @@ document.addEventListener('DOMContentLoaded', () => {
             audioElement.pause();
             audioElement.src = '';
             hideMiniPlayer();
+            // Clear saved state when user closes player
+            localStorage.removeItem(AUDIO_STATE_KEY);
+        });
+    }
+
+    // =====================================================
+    // VOLUME CONTROL FUNCTIONALITY
+    // =====================================================
+
+    function updateVolumeUI(volume) {
+        const percentage = volume * 100;
+        if (audioVolumeBar) audioVolumeBar.style.width = `${percentage}%`;
+        if (miniAudioVolumeBar) miniAudioVolumeBar.style.width = `${percentage}%`;
+
+        // Update mute button icons
+        const icon = volume === 0 ? '[○]' : '[♪]';
+        if (audioVolumeBtn) audioVolumeBtn.textContent = icon;
+        if (miniAudioVolumeBtn) miniAudioVolumeBtn.textContent = icon;
+
+        // Update muted class
+        if (audioVolumeBtn) audioVolumeBtn.classList.toggle('muted', volume === 0);
+        if (miniAudioVolumeBtn) miniAudioVolumeBtn.classList.toggle('muted', volume === 0);
+    }
+
+    function setVolume(volume) {
+        volume = Math.max(0, Math.min(1, volume));
+        audioElement.volume = volume;
+        if (volume > 0) {
+            savedVolume = volume;
+            isMuted = false;
+        }
+        localStorage.setItem(VOLUME_KEY, volume.toString());
+        updateVolumeUI(volume);
+    }
+
+    function toggleMute() {
+        if (isMuted || audioElement.volume === 0) {
+            // Unmute - restore previous volume
+            setVolume(savedVolume > 0 ? savedVolume : 1);
+            isMuted = false;
+        } else {
+            // Mute
+            savedVolume = audioElement.volume;
+            audioElement.volume = 0;
+            isMuted = true;
+            updateVolumeUI(0);
+        }
+    }
+
+    // Initialize volume from saved state
+    audioElement.volume = savedVolume;
+    updateVolumeUI(savedVolume);
+
+    // Popup player volume controls
+    if (audioVolumeBtn) {
+        audioVolumeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMute();
+        });
+    }
+
+    if (audioVolume) {
+        audioVolume.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const rect = audioVolume.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percentage = clickX / rect.width;
+            setVolume(percentage);
+        });
+    }
+
+    // Mini player volume controls
+    if (miniAudioVolumeBtn) {
+        miniAudioVolumeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMute();
+        });
+    }
+
+    if (miniAudioVolume) {
+        miniAudioVolume.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const rect = miniAudioVolume.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percentage = clickX / rect.width;
+            setVolume(percentage);
         });
     }
 

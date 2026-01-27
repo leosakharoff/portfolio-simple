@@ -332,57 +332,55 @@ body {
     opacity: 0.7;
 }
 
-/* Audio Player - raw early-web aesthetic */
+/* Audio Player - bracket/monospace aesthetic */
 .audio-player {
     margin-top: 12px;
     padding-top: 12px;
     border-top: 1px solid #ccc;
-    font-family: 'Trebuchet MS', 'Gill Sans', Arial, sans-serif;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+    font-size: 11px;
 }
 
 .audio-track-list {
-    max-height: 100px;
+    max-height: 120px;
     overflow-y: auto;
-    margin-bottom: 8px;
-    border: 1px solid #ccc;
-    background: #fff;
+    margin-bottom: 10px;
 }
 
 .audio-track {
-    padding: 3px 6px;
+    padding: 2px 0;
     cursor: pointer;
-    font-size: 11px;
     display: flex;
     align-items: center;
-    gap: 6px;
-    border-bottom: 1px solid #eee;
-    color: teal;
-}
-
-.audio-track:last-child {
-    border-bottom: none;
+    gap: 4px;
+    color: #333;
+    line-height: 1.4;
 }
 
 .audio-track:hover {
     color: firebrick;
-    background: #f5f5f5;
 }
 
 .audio-track.active {
-    background: whitesmoke;
-    border-left: 4px solid teal;
-    color: #333;
-    font-weight: bold;
+    color: #000;
+}
+
+.audio-track::before {
+    content: "[ ]";
+    color: #999;
+}
+
+.audio-track:hover::before {
+    color: firebrick;
 }
 
 .audio-track.active::before {
-    content: "♫ ";
+    content: "[●]";
+    color: teal;
 }
 
 .audio-track-number {
-    color: #999;
-    font-size: 10px;
-    min-width: 14px;
+    display: none;
 }
 
 .audio-track-name {
@@ -394,60 +392,56 @@ body {
 
 .audio-controls {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    gap: 4px;
-    margin-bottom: 6px;
+    gap: 8px;
+    margin-bottom: 8px;
 }
 
 .audio-btn {
-    background: #f0f0f0;
-    border: 1px solid #999;
+    background: none;
+    border: none;
     cursor: pointer;
-    font-size: 12px;
-    padding: 2px 8px;
-    color: #333;
+    font-size: 11px;
+    padding: 0;
+    color: #666;
     font-family: inherit;
 }
 
 .audio-btn:hover {
-    background: #e0e0e0;
+    color: firebrick;
 }
 
 .audio-btn:active {
-    background: #ccc;
+    color: #000;
 }
 
 .audio-play-btn {
-    font-size: 12px;
-    padding: 4px 12px;
-    background: #e8e8e8;
-    font-weight: bold;
+    font-size: 11px;
+    color: teal;
 }
 
 .audio-play-btn:hover {
-    background: #d0d0d0;
+    color: firebrick;
 }
 
 .audio-progress-container {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 
 .audio-time {
     font-size: 10px;
     color: #666;
-    min-width: 32px;
-    text-align: center;
-    font-family: monospace;
+    min-width: 36px;
+    font-family: inherit;
 }
 
 .audio-progress {
     flex: 1;
-    height: 8px;
+    height: 4px;
     background: #ddd;
-    border: 1px inset #999;
     cursor: pointer;
     position: relative;
 }
@@ -459,24 +453,69 @@ body {
 }
 
 .audio-progress:hover .audio-progress-bar {
-    background: #006666;
+    background: firebrick;
 }
 
-/* Global Mini Audio Player - raw early-web aesthetic */
+.audio-volume-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.audio-volume-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 0;
+    color: #666;
+    font-family: inherit;
+}
+
+.audio-volume-btn:hover {
+    color: firebrick;
+}
+
+.audio-volume-btn.muted {
+    color: #999;
+}
+
+.audio-volume {
+    flex: 1;
+    height: 4px;
+    background: #ddd;
+    cursor: pointer;
+    position: relative;
+    max-width: 80px;
+}
+
+.audio-volume-bar {
+    height: 100%;
+    background: teal;
+    width: 100%;
+}
+
+.audio-volume:hover .audio-volume-bar {
+    background: firebrick;
+}
+
+/* Global Mini Audio Player - bracket/monospace aesthetic */
 .mini-audio-player {
     position: fixed;
     bottom: 80px;
     right: 20px;
-    background: #f5f5f5;
-    padding: 8px 10px;
+    background: #fafafa;
+    padding: 8px 12px;
     z-index: 1000;
     display: none;
     flex-direction: column;
     gap: 6px;
-    min-width: 180px;
-    max-width: 240px;
-    border: 1px solid #999;
-    font-family: 'Trebuchet MS', 'Gill Sans', Arial, sans-serif;
+    min-width: 200px;
+    max-width: 280px;
+    border: 1px solid #ccc;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+    font-size: 10px;
 }
 
 .mini-audio-player.visible {
@@ -486,62 +525,60 @@ body {
 .mini-audio-info {
     display: flex;
     align-items: center;
-    padding-right: 16px;
+    padding-right: 20px;
 }
 
 .mini-audio-track {
     font-size: 10px;
-    color: teal;
+    color: #333;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 160px;
+    max-width: 200px;
 }
 
 .mini-audio-track::before {
-    content: "♫ ";
+    content: "[●] ";
+    color: teal;
 }
 
 .mini-audio-controls {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
 }
 
 .mini-audio-btn {
-    background: #e8e8e8;
-    border: 1px solid #999;
+    background: none;
+    border: none;
     cursor: pointer;
     font-size: 10px;
-    padding: 2px 6px;
-    color: #333;
+    padding: 0;
+    color: #666;
     font-family: inherit;
 }
 
 .mini-audio-btn:hover {
-    background: #d0d0d0;
+    color: firebrick;
 }
 
 .mini-audio-btn:active {
-    background: #bbb;
+    color: #000;
 }
 
 .mini-audio-play-btn {
-    font-size: 10px;
-    padding: 3px 8px;
-    font-weight: bold;
+    color: teal;
 }
 
 .mini-audio-play-btn:hover {
-    background: #ccc;
+    color: firebrick;
 }
 
 .mini-audio-progress {
     width: 100%;
-    height: 6px;
+    height: 3px;
     background: #ddd;
-    border: 1px inset #999;
     cursor: pointer;
     position: relative;
 }
@@ -554,15 +591,58 @@ body {
 
 .mini-audio-close {
     position: absolute;
-    top: 2px;
-    right: 2px;
+    top: 4px;
+    right: 4px;
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 12px;
-    color: #666;
-    padding: 0 4px;
+    font-size: 10px;
+    color: #999;
+    padding: 0;
     line-height: 1;
+    font-family: inherit;
+}
+
+.mini-audio-volume-container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mini-audio-volume-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 10px;
+    padding: 0;
+    color: #666;
+    font-family: inherit;
+}
+
+.mini-audio-volume-btn:hover {
+    color: firebrick;
+}
+
+.mini-audio-volume-btn.muted {
+    color: #999;
+}
+
+.mini-audio-volume {
+    width: 50px;
+    height: 3px;
+    background: #ddd;
+    cursor: pointer;
+    position: relative;
+}
+
+.mini-audio-volume-bar {
+    height: 100%;
+    background: teal;
+    width: 100%;
+}
+
+.mini-audio-volume:hover .mini-audio-volume-bar {
+    background: firebrick;
 }
 
 .mini-audio-close:hover {

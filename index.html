@@ -546,7 +546,7 @@
         <!-- GitHub Project: Heart Sound Classifier -->
         <div class="project-word"
              data-category="sound"
-             style="top: 88%; left: 75%;"
+             style="top: 38%; left: 20%;"
              data-title="Heart Sound Classifier"
              data-description="A deep learning prototype for classifying heart sounds as normal or abnormal using mel spectrograms and convolutional neural networks. Explores the intersection of audio processing and medical diagnostics."
              data-tech="Python, TensorFlow, CNNs, Audio Processing, Mel Spectrograms"
@@ -584,10 +584,10 @@
                 <img src="" alt="" id="popupImage">
                 <video id="popupVideo" autoplay muted playsinline loop controls style="display: none;"></video>
                 <div class="gallery-nav-area gallery-nav-prev" id="galleryPrev">
-                    <span class="gallery-arrow">‹</span>
+                    <span class="gallery-arrow">[‹]</span>
                 </div>
                 <div class="gallery-nav-area gallery-nav-next" id="galleryNext">
-                    <span class="gallery-arrow">›</span>
+                    <span class="gallery-arrow">[›]</span>
                 </div>
                 <div class="popup-dots" id="popupDots"></div>
             </div>
@@ -605,9 +605,9 @@
                 <div class="audio-player" id="audioPlayer" style="display: none;">
                     <div class="audio-track-list" id="audioTrackList"></div>
                     <div class="audio-controls">
-                        <button class="audio-btn" id="audioPrev" title="Previous">⏮</button>
-                        <button class="audio-btn audio-play-btn" id="audioPlayPause" title="Play">▶</button>
-                        <button class="audio-btn" id="audioNext" title="Next">⏭</button>
+                        <button class="audio-btn" id="audioPrev" title="Previous">[⏮]</button>
+                        <button class="audio-btn audio-play-btn" id="audioPlayPause" title="Play">[▶]</button>
+                        <button class="audio-btn" id="audioNext" title="Next">[⏭]</button>
                     </div>
                     <div class="audio-progress-container">
                         <span class="audio-time" id="audioCurrentTime">0:00</span>
@@ -615,6 +615,12 @@
                             <div class="audio-progress-bar" id="audioProgressBar"></div>
                         </div>
                         <span class="audio-time" id="audioDuration">0:00</span>
+                    </div>
+                    <div class="audio-volume-container">
+                        <button class="audio-volume-btn" id="audioVolumeBtn" title="Mute">[♪]</button>
+                        <div class="audio-volume" id="audioVolume">
+                            <div class="audio-volume-bar" id="audioVolumeBar"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -631,14 +637,20 @@
             <span class="mini-audio-track" id="miniAudioTrack">No track</span>
         </div>
         <div class="mini-audio-controls">
-            <button class="mini-audio-btn" id="miniAudioPrev" title="Previous">⏮</button>
-            <button class="mini-audio-btn mini-audio-play-btn" id="miniAudioPlayPause" title="Play">▶</button>
-            <button class="mini-audio-btn" id="miniAudioNext" title="Next">⏭</button>
+            <button class="mini-audio-btn" id="miniAudioPrev" title="Previous">[⏮]</button>
+            <button class="mini-audio-btn mini-audio-play-btn" id="miniAudioPlayPause" title="Play">[▶]</button>
+            <button class="mini-audio-btn" id="miniAudioNext" title="Next">[⏭]</button>
         </div>
         <div class="mini-audio-progress" id="miniAudioProgress">
             <div class="mini-audio-progress-bar" id="miniAudioProgressBar"></div>
         </div>
-        <button class="mini-audio-close" id="miniAudioClose" title="Close player">×</button>
+        <div class="mini-audio-volume-container">
+            <button class="mini-audio-volume-btn" id="miniAudioVolumeBtn" title="Mute">[♪]</button>
+            <div class="mini-audio-volume" id="miniAudioVolume">
+                <div class="mini-audio-volume-bar" id="miniAudioVolumeBar"></div>
+            </div>
+        </div>
+        <button class="mini-audio-close" id="miniAudioClose" title="Close player">[×]</button>
     </div>
 
     <!-- Category legend -->
