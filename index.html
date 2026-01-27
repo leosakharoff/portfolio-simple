@@ -4,9 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leo Sakharoff — Creative Technologist</title>
+    <link rel="icon" type="image/png" href="favicon-frames/frame_001.png" id="favicon">
+    <link rel="apple-touch-icon" href="favicon-frames/frame_001.png">
     <link rel="stylesheet" href="css/scattered.css">
 </head>
 <body>
+    <!-- Background video -->
+    <video class="background-video" autoplay muted loop playsinline>
+        <source src="media/background-loop.mp4" type="video/mp4">
+    </video>
+
     <!-- Header with name and CV download -->
     <header class="site-header">
         <div class="header-left">
@@ -439,6 +446,117 @@
             Det Grønne Loppemarked
         </div>
 
+        <!-- GitHub Project: Orchid -->
+        <div class="project-word"
+             data-category="programming"
+             style="top: 10%; left: 40%;"
+             data-title="Orchid"
+             data-description="A jazz harmony analysis tool with real-time MIDI input and ML-based chord recognition. Play chords on a MIDI keyboard and get instant harmonic analysis with jazz voicing suggestions."
+             data-tech="TypeScript, MIDI, Machine Learning, Web Audio API"
+             data-year="2026"
+             data-github="https://github.com/leosakharoff/orchid"
+             data-project-id="orchid"
+             data-media="https://media.leosakharoff.com/images/projects/orchid/live-csus4.png, https://media.leosakharoff.com/images/projects/orchid/live-fsharp-maj.png, https://media.leosakharoff.com/images/projects/orchid/live-shell.png, https://media.leosakharoff.com/images/projects/orchid/live-baug.png, https://media.leosakharoff.com/images/projects/orchid/file-upload.png">
+            Orchid
+        </div>
+
+        <!-- Project: p.spectrum -->
+        <div class="project-word"
+             data-category="programming"
+             style="top: 15%; left: 80%;"
+             data-title="p.spectrum"
+             data-description="Real-time overtone visualizer for musicians. Waterfall spectrogram with logarithmic frequency scale, piano keyboard overlay, and harmonic highlighting. Detects fundamentals and displays overtone series with color-coded intensity."
+             data-tech="JavaScript, Web Audio API, Canvas, FFT"
+             data-year="2026"
+             data-project-id="p-spectrum"
+             data-media="https://media.leosakharoff.com/images/projects/p-spectrum/full-ui.png, https://media.leosakharoff.com/images/projects/p-spectrum/harmonic-detail.png">
+            p.spectrum
+        </div>
+
+        <!-- GitHub Project: Hidden Stories -->
+        <div class="project-word"
+             data-category="interactive"
+             style="top: 75%; left: 20%;"
+             data-title="Hidden Stories"
+             data-description="An AI-powered, location-aware audio guide that narrates stories, plays local music, and adapts in real-time as you walk. Creates immersive cultural and historical experiences using Google Maps API and AI text-to-speech."
+             data-tech="TypeScript, Google Maps API, AI TTS, Geolocation"
+             data-year="2025"
+             data-github="https://github.com/leosakharoff/hidden-stories"
+             data-project-id="hidden-stories"
+             data-media="https://media.leosakharoff.com/images/projects/hidden-stories/story-copenhagen.png">
+            Hidden Stories
+        </div>
+
+        <!-- GitHub Project: Overtone -->
+        <div class="project-word"
+             data-category="programming"
+             style="top: 40%; left: 70%;"
+             data-title="Overtone"
+             data-description="A music similarity engine using AI audio embeddings to find tracks that actually sound alike. Goes beyond metadata to analyze the sonic characteristics of music."
+             data-tech="Python, Audio Embeddings, Machine Learning, Signal Processing"
+             data-year="2026"
+             data-github="https://github.com/leosakharoff/overtone"
+             data-project-id="overtone"
+             data-media="https://media.leosakharoff.com/images/projects/overtone/similar-tracks-queue.png, https://media.leosakharoff.com/images/projects/overtone/similar-tracks-playing.png, https://media.leosakharoff.com/images/projects/overtone/about-how-it-works.png, https://media.leosakharoff.com/images/projects/overtone/api-docs.png">
+            Overtone
+        </div>
+
+        <!-- GitHub Project: Discogs MCP -->
+        <div class="project-word"
+             data-category="programming"
+             style="top: 85%; left: 45%;"
+             data-title="Discogs MCP"
+             data-description="An MCP server for Discogs music database research. Search releases, artists, labels, and access your collection and wantlist through AI assistants."
+             data-tech="Python, MCP Protocol, Discogs API, REST"
+             data-year="2026"
+             data-github="https://github.com/leosakharoff/discogs-mcp"
+             data-project-id="discogs-mcp"
+             data-media="https://media.leosakharoff.com/images/projects/discogs-mcp/discogs-tools.png">
+            Discogs MCP
+        </div>
+
+        <!-- GitHub Project: Bandcamp MCP -->
+        <div class="project-word"
+             data-category="programming"
+             style="top: 60%; left: 5%;"
+             data-title="Bandcamp MCP"
+             data-description="An MCP server for Bandcamp music discovery. Search and explore independent music releases through AI assistants."
+             data-tech="Python, MCP Protocol, Web Scraping"
+             data-year="2026"
+             data-github="https://github.com/leosakharoff/bandcamp-mcp"
+             data-project-id="bandcamp-mcp"
+             data-media="https://media.leosakharoff.com/images/projects/bandcamp-mcp/bandcamp-tools.png, https://media.leosakharoff.com/images/projects/bandcamp-mcp/bandcamp-browse.png">
+            Bandcamp MCP
+        </div>
+
+        <!-- GitHub Project: YouTube Music MCP -->
+        <div class="project-word"
+             data-category="programming"
+             style="top: 25%; left: 85%;"
+             data-title="YouTube Music MCP"
+             data-description="An MCP server for YouTube Music. Search tracks, create playlists, and manage your music library through AI assistants."
+             data-tech="Python, MCP Protocol, YouTube Music API"
+             data-year="2026"
+             data-github="https://github.com/leosakharoff/youtube-music-mcp"
+             data-project-id="youtube-music-mcp"
+             data-media="https://media.leosakharoff.com/images/projects/youtube-music-mcp/youtube-tools.png, https://media.leosakharoff.com/images/projects/youtube-music-mcp/youtube-playlist.png, https://media.leosakharoff.com/images/projects/youtube-music-mcp/mcp-research.png, https://media.leosakharoff.com/images/projects/youtube-music-mcp/mcp-curation.png">
+            YouTube Music MCP
+        </div>
+
+        <!-- GitHub Project: Heart Sound Classifier -->
+        <div class="project-word"
+             data-category="sound"
+             style="top: 88%; left: 75%;"
+             data-title="Heart Sound Classifier"
+             data-description="A deep learning prototype for classifying heart sounds as normal or abnormal using mel spectrograms and convolutional neural networks. Explores the intersection of audio processing and medical diagnostics."
+             data-tech="Python, TensorFlow, CNNs, Audio Processing, Mel Spectrograms"
+             data-year="2026"
+             data-github="https://github.com/leosakharoff/heart_sound_classifier"
+             data-media="https://media.leosakharoff.com/images/projects/heart-sound-classifier/auscultation_points.png, https://media.leosakharoff.com/images/projects/heart-sound-classifier/pipeline_diagram.png, https://media.leosakharoff.com/images/projects/heart-sound-classifier/model_architecture.png, https://media.leosakharoff.com/images/projects/heart-sound-classifier/preprocessing_diagram.png, https://media.leosakharoff.com/images/projects/heart-sound-classifier/training_curves.png"
+             data-project-id="heart-sound-classifier">
+            Heart Sound Classifier
+        </div>
+
         <!-- Additional decorative/context words scattered around -->
         <div class="context-word" style="top: 8%; left: 45%; font-size: 11px;">interactive design</div>
         <div class="context-word" style="top: 45%; left: 5%; font-size: 10px;">generative music</div>
@@ -553,5 +671,19 @@
     </footer>
 
     <script src="js/scattered.js"></script>
+    <script>
+        // Animated favicon
+        (function() {
+            const totalFrames = 50;
+            let currentFrame = 1;
+            const favicon = document.getElementById('favicon');
+
+            setInterval(() => {
+                currentFrame = (currentFrame % totalFrames) + 1;
+                const frameNum = String(currentFrame).padStart(3, '0');
+                favicon.href = `favicon-frames/frame_${frameNum}.png`;
+            }, 100); // 10fps
+        })();
+    </script>
 </body>
 </html>

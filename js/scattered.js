@@ -282,6 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Handle audio player
+        console.log('Audio check:', { projectId, hasManifest: !!projectAudioManifest, hasTracks: projectAudioManifest ? !!projectAudioManifest[projectId] : false });
         if (projectAudioManifest && projectId && projectAudioManifest[projectId]) {
             // Check if we're switching to a different project's audio
             const newTracks = projectAudioManifest[projectId];
