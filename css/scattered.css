@@ -778,7 +778,8 @@ body {
         display: flex !important;
         flex-direction: column !important;
         gap: 10px !important;
-        padding: 100px 20px 200px !important;
+        padding: 100px 20px 160px !important;
+        padding-bottom: 160px !important;
         align-items: flex-start !important;
     }
 
@@ -806,6 +807,12 @@ body {
 
     .umbrella-indicator {
         display: none !important;
+    }
+
+    /* Hide [+] indicator on mobile */
+    .umbrella-project::after {
+        display: none !important;
+        content: none !important;
     }
 
     .project-popup {
@@ -865,14 +872,124 @@ body {
         justify-content: center !important;
     }
 
-    /* Audio player above legend */
+    /* Audio player above legend - same width as category box */
     .mini-audio-player {
         bottom: 75px !important;
         left: 10px !important;
         right: 10px !important;
         width: auto !important;
+        max-width: none !important;
+        min-width: auto !important;
         z-index: 100 !important;
-        z-index: 100;
+    }
+
+    /* Hide the floating popup on mobile - we use inline accordion instead */
+    .project-popup {
+        display: none !important;
+    }
+
+    /* Mobile accordion - inline project details */
+    .mobile-accordion {
+        display: block;
+        width: 100%;
+        background: var(--popup-bg);
+        border: 1px solid #ccc;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+        overflow: hidden;
+    }
+
+    .mobile-accordion .accordion-media {
+        width: 100%;
+        height: 160px;
+        background: #e0e0e0;
+        overflow: hidden;
+    }
+
+    .mobile-accordion .accordion-media img,
+    .mobile-accordion .accordion-media video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .mobile-accordion .accordion-info {
+        padding: 12px;
+        border-top: 1px solid #ddd;
+    }
+
+    .mobile-accordion .accordion-title {
+        font-size: 11px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: var(--text);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .mobile-accordion .accordion-title::before {
+        content: "// ";
+        color: #999;
+    }
+
+    .mobile-accordion .accordion-description {
+        font-size: 10px;
+        line-height: 1.5;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    .mobile-accordion .accordion-meta {
+        display: flex;
+        gap: 12px;
+        font-size: 9px;
+        color: #666;
+        border-top: 1px solid #eee;
+        padding-top: 8px;
+    }
+
+    .mobile-accordion .accordion-tech {
+        flex: 1;
+    }
+
+    .mobile-accordion .accordion-tech::before {
+        content: "tech: ";
+        color: #999;
+    }
+
+    .mobile-accordion .accordion-year::before {
+        content: "year: ";
+        color: #999;
+    }
+
+    .mobile-accordion .accordion-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .mobile-accordion .accordion-link {
+        color: teal;
+        text-decoration: none;
+        font-size: 10px;
+    }
+
+    .mobile-accordion .accordion-link::before {
+        content: '[';
+        color: #999;
+    }
+
+    .mobile-accordion .accordion-link::after {
+        content: ']';
+        color: #999;
+    }
+
+    /* Project word expanded state */
+    .project-word.mobile-expanded {
+        color: #000 !important;
     }
 }
 

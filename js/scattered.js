@@ -29,6 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentImageIndex = 0;
     let galleryInterval = null;
 
+    // Mobile accordion state
+    let currentMobileAccordion = null;
+    let currentMobileExpandedProject = null;
+
+    // Check if we're on mobile
+    function isMobileView() {
+        return window.innerWidth <= 600;
+    }
+
     // Image manifest cache
     let projectImagesManifest = null;
 
@@ -488,6 +497,112 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 200);
     }
 
+    // =====================================================
+    // MOBILE ACCORDION FUNCTIONALITY
+    // =====================================================
+
+    // Close mobile accordion
+    function closeMobileAccordion() {
+        if (currentMobileAccordion) {
+            currentMobileAccordion.remove();
+            currentMobileAccordion = null;
+        }
+        if (currentMobileExpandedProject) {
+            currentMobileExpandedProject.classList.remove('mobile-expanded');
+            currentMobileExpandedProject = null;
+        }
+    }
+
+    // Create and show mobile accordion under the clicked project
+    function showMobileAccordion(element) {
+        // If clicking the same project, close it
+        if (currentMobileExpandedProject === element) {
+            closeMobileAccordion();
+            return;
+        }
+
+        // Close any existing accordion
+        closeMobileAccordion();
+
+        // Get project data
+        const title = element.dataset.title;
+        const description = element.dataset.description;
+        const tech = element.dataset.tech;
+        const year = element.dataset.year;
+        const link = element.dataset.link;
+        const media = element.dataset.media;
+        const github = element.dataset.github;
+        const pdf = element.dataset.pdf;
+        const instagram = element.dataset.instagram;
+
+        // Get project ID for manifest lookup
+        let projectId = element.dataset.projectId;
+        if (!projectId && link) {
+            const match = link.match(/projects\/(.+?)\.html/);
+            if (match) projectId = match[1];
+        }
+
+        // Get media from manifest if available
+        let mediaItems = [];
+        if (projectImagesManifest && projectId && projectImagesManifest[projectId]) {
+            mediaItems = projectImagesManifest[projectId];
+        } else if (media) {
+            if (media.includes(',')) {
+                mediaItems = media.split(',').map(s => s.trim());
+            } else {
+                mediaItems = [media];
+            }
+        }
+
+        // Build accordion HTML
+        let mediaHtml = '';
+        if (mediaItems.length > 0) {
+            const firstMedia = mediaItems[0];
+            if (isVideoFile(firstMedia)) {
+                mediaHtml = `<div class="accordion-media"><video src="${firstMedia}" autoplay muted loop playsinline></video></div>`;
+            } else {
+                mediaHtml = `<div class="accordion-media"><img src="${firstMedia}" alt="${title}"></div>`;
+            }
+        }
+
+        let linksHtml = '';
+        if (github || pdf || instagram) {
+            const links = [];
+            if (github) links.push(`<a href="${github}" class="accordion-link" target="_blank">GitHub</a>`);
+            if (pdf) links.push(`<a href="${pdf}" class="accordion-link" target="_blank" download>Download PDF</a>`);
+            if (instagram) links.push(`<a href="${instagram}" class="accordion-link" target="_blank">Instagram</a>`);
+            linksHtml = `<div class="accordion-links">${links.join('')}</div>`;
+        }
+
+        const accordionEl = document.createElement('div');
+        accordionEl.className = 'mobile-accordion';
+        accordionEl.innerHTML = `
+            ${mediaHtml}
+            <div class="accordion-info">
+                <div class="accordion-title">${title}</div>
+                <div class="accordion-description">${description}</div>
+                <div class="accordion-meta">
+                    <span class="accordion-tech">${tech}</span>
+                    <span class="accordion-year">${year}</span>
+                </div>
+                ${linksHtml}
+            </div>
+        `;
+
+        // Insert accordion after the project element
+        element.insertAdjacentElement('afterend', accordionEl);
+
+        // Update state
+        currentMobileAccordion = accordionEl;
+        currentMobileExpandedProject = element;
+        element.classList.add('mobile-expanded');
+
+        // Scroll into view if needed
+        setTimeout(() => {
+            accordionEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 50);
+    }
+
     // Gallery functions
     function showImage(index) {
         if (galleryImages.length === 0) return;
@@ -747,19 +862,28 @@ document.addEventListener('DOMContentLoaded', () => {
     projectWords.forEach(word => {
         // Click event
         word.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // On mobile, use accordion behavior for all projects
+            if (isMobileView()) {
+                // For umbrella projects, show the umbrella's own info in accordion
+                showMobileAccordion(word);
+                return;
+            }
+
+            // Desktop behavior
             if (word.dataset.umbrella === 'true') {
                 // Toggle umbrella expansion
-                e.stopPropagation();
                 toggleUmbrella(word);
-            } else {
-                // Prevent navigation, optionally toggle popup if desired
-                e.preventDefault();
             }
         });
 
         if (word.dataset.umbrella === 'true') {
             // For umbrella projects, use mouseover/mouseout with target checking
             word.addEventListener('mouseover', (e) => {
+                // Skip on mobile
+                if (isMobileView()) return;
                 // If an umbrella is expanded (and it's not this one), ignore
                 if (currentExpandedUmbrella && currentExpandedUmbrella !== word) {
                     return;
@@ -771,6 +895,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             word.addEventListener('mouseout', (e) => {
+                // Skip on mobile
+                if (isMobileView()) return;
                 const relatedTarget = e.relatedTarget;
                 // Check if leaving to outside umbrella or to a sub-project
                 const goingToSubProject = relatedTarget && relatedTarget.closest('.sub-project');
@@ -788,6 +914,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // For regular projects, use mouseenter/mouseleave
             word.addEventListener('mouseenter', () => {
+                // Skip on mobile
+                if (isMobileView()) return;
                 // If an umbrella is expanded, do not allow hovering regular projects outside of it
                 // Since this is the 'else' block for !umbrella, 'word' is a regular project.
                 // If currentExpandedUmbrella is set, we ignore this hover unless this word is somehow part of it (which it isn't, as sub-projects are handled separately).
@@ -797,6 +925,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 showPopup(word);
             });
             word.addEventListener('mouseleave', () => {
+                // Skip on mobile
+                if (isMobileView()) return;
                 hidePopup();
             });
         }
@@ -805,16 +935,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listeners for sub-projects
     document.querySelectorAll('.sub-project').forEach(subProject => {
         subProject.addEventListener('mouseenter', () => {
-            showPopup(subProject);
+            if (!isMobileView()) {
+                showPopup(subProject);
+            }
         });
 
         subProject.addEventListener('mouseleave', () => {
-            hidePopup();
+            if (!isMobileView()) {
+                hidePopup();
+            }
         });
 
         subProject.addEventListener('click', (e) => {
             e.stopPropagation();
-            // Navigation removed
+            // On mobile, use accordion
+            if (isMobileView()) {
+                showMobileAccordion(subProject);
+            }
         });
     });
 
@@ -836,8 +973,20 @@ document.addEventListener('DOMContentLoaded', () => {
         hidePopup();
     });
 
-    // Click outside to collapse expanded umbrella
+    // Click outside to collapse expanded umbrella or close mobile accordion
     document.addEventListener('click', (e) => {
+        // Handle mobile accordion close
+        if (isMobileView() && currentMobileAccordion) {
+            const clickedOnProject = e.target.closest('.project-word');
+            const clickedOnSubProject = e.target.closest('.sub-project');
+            const clickedOnAccordion = e.target.closest('.mobile-accordion');
+
+            if (!clickedOnProject && !clickedOnSubProject && !clickedOnAccordion) {
+                closeMobileAccordion();
+            }
+        }
+
+        // Handle desktop umbrella collapse
         if (currentExpandedUmbrella) {
             const clickedOnUmbrella = e.target.closest('.umbrella-project');
             const clickedOnSubProject = e.target.closest('.sub-project');
@@ -899,6 +1048,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reposition popup on window resize
     window.addEventListener('resize', () => {
+        // Close mobile accordion when switching to desktop
+        if (!isMobileView() && currentMobileAccordion) {
+            closeMobileAccordion();
+        }
+
         if (isPopupVisible && currentProject) {
             positionPopup(currentProject);
         }
