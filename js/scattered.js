@@ -501,30 +501,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // MOBILE ACCORDION FUNCTIONALITY
     // =====================================================
 
-    // Close mobile accordion
+    // Track mobile umbrella state
+    let currentMobileUmbrella = null;
+    let currentMobileSubAccordion = null;
+
+    // Close mobile accordion completely
     function closeMobileAccordion() {
         if (currentMobileAccordion) {
             currentMobileAccordion.remove();
             currentMobileAccordion = null;
         }
+        if (currentMobileSubAccordion) {
+            currentMobileSubAccordion.remove();
+            currentMobileSubAccordion = null;
+        }
         if (currentMobileExpandedProject) {
             currentMobileExpandedProject.classList.remove('mobile-expanded');
             currentMobileExpandedProject = null;
         }
+        if (currentMobileUmbrella) {
+            currentMobileUmbrella.classList.remove('mobile-expanded');
+            currentMobileUmbrella = null;
+        }
+        // Remove any sub-project highlights
+        document.querySelectorAll('.mobile-sub-item.active').forEach(el => el.classList.remove('active'));
     }
 
-    // Create and show mobile accordion under the clicked project
-    function showMobileAccordion(element) {
-        // If clicking the same project, close it
-        if (currentMobileExpandedProject === element) {
-            closeMobileAccordion();
-            return;
-        }
-
-        // Close any existing accordion
-        closeMobileAccordion();
-
-        // Get project data
+    // Build accordion content HTML for a project element
+    function buildAccordionContent(element) {
         const title = element.dataset.title;
         const description = element.dataset.description;
         const tech = element.dataset.tech;
@@ -554,7 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Build accordion HTML
+        // Build media HTML
         let mediaHtml = '';
         if (mediaItems.length > 0) {
             const firstMedia = mediaItems[0];
@@ -565,6 +569,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Build links HTML
         let linksHtml = '';
         if (github || pdf || instagram) {
             const links = [];
@@ -574,9 +579,7 @@ document.addEventListener('DOMContentLoaded', () => {
             linksHtml = `<div class="accordion-links">${links.join('')}</div>`;
         }
 
-        const accordionEl = document.createElement('div');
-        accordionEl.className = 'mobile-accordion';
-        accordionEl.innerHTML = `
+        return `
             ${mediaHtml}
             <div class="accordion-info">
                 <div class="accordion-title">${title}</div>
@@ -588,14 +591,111 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${linksHtml}
             </div>
         `;
+    }
+
+    // Create and show mobile accordion under the clicked project
+    function showMobileAccordion(element) {
+        const isUmbrella = element.dataset.umbrella === 'true';
+        const isSubProject = element.classList.contains('sub-project');
+
+        // If clicking on a sub-project item in the list
+        if (isSubProject || element.classList.contains('mobile-sub-item')) {
+            // Find the actual sub-project element if this is a list item
+            let subProjectEl = element;
+            if (element.classList.contains('mobile-sub-item')) {
+                const projectId = element.dataset.subProjectId;
+                subProjectEl = document.querySelector(`.sub-project[data-project-id="${projectId}"]`);
+                if (!subProjectEl) return;
+            }
+
+            // Remove previous sub-accordion
+            if (currentMobileSubAccordion) {
+                currentMobileSubAccordion.remove();
+                currentMobileSubAccordion = null;
+            }
+            document.querySelectorAll('.mobile-sub-item.active').forEach(el => el.classList.remove('active'));
+
+            // Mark this item as active
+            if (element.classList.contains('mobile-sub-item')) {
+                element.classList.add('active');
+            }
+
+            // Create sub-project accordion
+            const subAccordionEl = document.createElement('div');
+            subAccordionEl.className = 'mobile-accordion mobile-sub-accordion';
+            subAccordionEl.innerHTML = buildAccordionContent(subProjectEl);
+
+            // Insert after the sub-projects list (inside the main accordion)
+            const subList = currentMobileAccordion.querySelector('.accordion-sub-list');
+            if (subList) {
+                subList.insertAdjacentElement('afterend', subAccordionEl);
+            }
+            currentMobileSubAccordion = subAccordionEl;
+
+            // Scroll into view
+            setTimeout(() => {
+                subAccordionEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 50);
+            return;
+        }
+
+        // If clicking the same umbrella project, collapse everything
+        if (isUmbrella && currentMobileUmbrella === element) {
+            closeMobileAccordion();
+            return;
+        }
+
+        // If clicking the same regular project, close it
+        if (!isUmbrella && currentMobileExpandedProject === element) {
+            closeMobileAccordion();
+            return;
+        }
+
+        // Close any existing accordion
+        closeMobileAccordion();
+
+        // Create the accordion element
+        const accordionEl = document.createElement('div');
+        accordionEl.className = 'mobile-accordion';
+
+        if (isUmbrella) {
+            // For umbrella projects: show card + list of sub-projects
+            const subProjects = element.querySelectorAll('.sub-project');
+            let subListHtml = '';
+            if (subProjects.length > 0) {
+                const subItems = Array.from(subProjects).map(sub => {
+                    const subTitle = sub.dataset.title;
+                    const subId = sub.dataset.projectId;
+                    const subCategory = sub.dataset.category;
+                    return `<div class="mobile-sub-item" data-sub-project-id="${subId}" data-category="${subCategory}">${subTitle}</div>`;
+                }).join('');
+                subListHtml = `<div class="accordion-sub-list">${subItems}</div>`;
+            }
+
+            accordionEl.innerHTML = buildAccordionContent(element) + subListHtml;
+
+            // Add click handlers for sub-project items
+            setTimeout(() => {
+                accordionEl.querySelectorAll('.mobile-sub-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        showMobileAccordion(item);
+                    });
+                });
+            }, 0);
+
+            currentMobileUmbrella = element;
+            element.classList.add('mobile-expanded');
+        } else {
+            // For regular projects: just show the card
+            accordionEl.innerHTML = buildAccordionContent(element);
+            currentMobileExpandedProject = element;
+            element.classList.add('mobile-expanded');
+        }
 
         // Insert accordion after the project element
         element.insertAdjacentElement('afterend', accordionEl);
-
-        // Update state
         currentMobileAccordion = accordionEl;
-        currentMobileExpandedProject = element;
-        element.classList.add('mobile-expanded');
 
         // Scroll into view if needed
         setTimeout(() => {
@@ -976,12 +1076,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Click outside to collapse expanded umbrella or close mobile accordion
     document.addEventListener('click', (e) => {
         // Handle mobile accordion close
-        if (isMobileView() && currentMobileAccordion) {
+        if (isMobileView() && (currentMobileAccordion || currentMobileUmbrella)) {
             const clickedOnProject = e.target.closest('.project-word');
             const clickedOnSubProject = e.target.closest('.sub-project');
             const clickedOnAccordion = e.target.closest('.mobile-accordion');
+            const clickedOnSubItem = e.target.closest('.mobile-sub-item');
 
-            if (!clickedOnProject && !clickedOnSubProject && !clickedOnAccordion) {
+            if (!clickedOnProject && !clickedOnSubProject && !clickedOnAccordion && !clickedOnSubItem) {
                 closeMobileAccordion();
             }
         }
