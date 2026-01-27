@@ -728,13 +728,15 @@ body {
 @media (max-width: 768px) {
     .site-header {
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
         align-items: flex-start;
         padding: 15px 20px;
     }
 
     .header-left {
-        gap: 10px;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
     }
 
     .header-video {
@@ -742,10 +744,22 @@ body {
         height: 32px;
     }
 
+    .site-title {
+        font-size: 13px;
+    }
+
+    .site-subtitle {
+        width: 100%;
+        margin-left: 40px; /* align with name (video width + gap) */
+        font-size: 10px;
+    }
+
     .header-nav {
         width: 100%;
         justify-content: flex-start;
         gap: 15px;
+        margin-left: 40px;
+        font-size: 11px;
     }
 
     .project-word {
