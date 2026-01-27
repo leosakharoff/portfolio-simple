@@ -2,7 +2,7 @@
 
 Minimal portfolio website with programmer aesthetic. Monospace typography, clean HTML/CSS, no frameworks.
 
-![Screenshot](screenshot.jpg)
+![Screenshot](screenshot.png)
 
 ## Structure
 
