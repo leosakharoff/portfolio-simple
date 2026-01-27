@@ -788,8 +788,12 @@ body {
         text-align: left;
     }
 
-    /* Hide sub-projects on mobile - show only umbrella */
-    .sub-project {
+    /* Hide sub-projects container and umbrella indicator on mobile */
+    .sub-projects {
+        display: none !important;
+    }
+
+    .umbrella-indicator {
         display: none !important;
     }
 
