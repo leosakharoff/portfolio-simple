@@ -796,7 +796,7 @@ body {
         display: flex !important;
         flex-direction: column !important;
         gap: 10px !important;
-        padding: 80px 20px 160px !important;
+        padding: 55px 20px 160px !important;
         padding-bottom: 160px !important;
         align-items: flex-start !important;
     }
