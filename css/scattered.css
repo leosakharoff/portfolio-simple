@@ -248,6 +248,10 @@ body {
     pointer-events: auto;
 }
 
+.popup-close {
+    display: none;
+}
+
 .popup-content {
     background: var(--popup-bg);
     border: 1px solid #ccc;
