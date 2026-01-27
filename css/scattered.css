@@ -827,32 +827,45 @@ body {
         overflow-y: auto;
     }
 
-    /* Footer area adjustments - stack vertically */
+    /* Footer area adjustments - fixed at bottom */
     .category-legend {
-        position: relative;
-        bottom: auto;
-        left: auto;
-        right: auto;
-        padding: 15px 20px;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        gap: 10px;
+        position: fixed;
+        bottom: 40px;
+        left: 15px;
+        right: 15px;
+        padding: 8px 10px;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        gap: 4px;
         background: var(--bg);
-        border-top: 1px solid #ddd;
+        border: 1px solid #ddd;
+        font-size: 10px;
+        z-index: 90;
+    }
+
+    .legend-item {
+        padding: 2px 4px;
+        gap: 2px;
+        font-size: 10px;
+    }
+
+    .legend-item span:last-child {
+        /* Category name - hide on very small screens if needed */
     }
 
     .site-footer {
-        padding: 15px 20px;
+        padding: 10px 15px;
     }
 
     .footer-links {
-        gap: 12px;
+        gap: 10px;
         flex-wrap: wrap;
+        font-size: 11px;
     }
 
-    /* Audio player in fixed position at bottom */
+    /* Audio player above legend */
     .mini-audio-player {
-        bottom: 45px;
+        bottom: 85px;
         left: 15px;
         right: 15px;
         width: auto;
