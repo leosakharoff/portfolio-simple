@@ -740,8 +740,7 @@ body {
     }
 
     .header-video {
-        width: 28px;
-        height: 28px;
+        display: none;
     }
 
     .site-title {
