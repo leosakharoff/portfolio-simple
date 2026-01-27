@@ -62,8 +62,17 @@ body {
 
 .header-left {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 12px;
+}
+
+.header-video {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.2);
+    opacity: 0.8;
+    border: 1px solid #999;
 }
 
 .site-title {
