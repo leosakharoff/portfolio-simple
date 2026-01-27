@@ -814,10 +814,19 @@ body {
         display: none !important;
     }
 
-    /* Hide [+] indicator on mobile */
+    /* Show [+] indicator on mobile for umbrella projects */
     .umbrella-project::after {
-        display: none !important;
-        content: none !important;
+        content: '[+]' !important;
+        display: inline-block !important;
+        margin-left: 6px;
+        font-size: 11px;
+        font-weight: 400;
+        color: #999;
+    }
+
+    .umbrella-project.mobile-expanded::after {
+        content: '[−]' !important;
+        color: teal;
     }
 
     .project-popup {
