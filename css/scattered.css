@@ -125,15 +125,17 @@ body {
     position: absolute;
     top: 100%;
     right: 0;
-    margin-top: 8px;
+    margin-top: 14px;
     display: none;
     flex-direction: column;
     align-items: flex-end;
     gap: 6px;
-    padding: 12px 0;
+    padding: 10px 14px;
     opacity: 0;
     transform: translateY(-10px);
     transition: opacity 0.2s, transform 0.2s;
+    background: var(--bg);
+    border: 1px solid #ccc;
 }
 
 .contact-list.open {
@@ -786,7 +788,7 @@ body {
 
     .site-header {
         margin: 10px !important;
-        padding: 10px 12px !important;
+        padding: 6px 12px !important;
         border: 1px solid #ccc !important;
         background: var(--bg) !important;
         width: calc(100% - 20px) !important;
@@ -797,6 +799,10 @@ body {
         display: none !important;
     }
 
+    .contact-list {
+        right: -12px !important;
+    }
+
     .scattered-container {
         position: relative !important;
         height: auto !important;
@@ -805,9 +811,9 @@ body {
         display: flex !important;
         flex-direction: column !important;
         gap: 10px !important;
-        padding: 55px 20px 160px !important;
+        padding: 70px 20px 160px !important;
         padding-bottom: 160px !important;
-        align-items: flex-start !important;
+        align-items: center !important;
     }
 
     .project-word,

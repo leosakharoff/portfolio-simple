@@ -215,10 +215,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Try to restore immediately, fall back to user interaction
                 restoreAudio();
             } else {
-                // No saved state - autoplay HeavenOfLasVegas on first user interaction
+                // No saved state - autoplay Kremnitze on first user interaction
                 const autoplayTrack = {
-                    name: 'HeavenOfLasVegas',
-                    path: 'https://media.leosakharoff.com/audio/ambient-electroacustic/HeavenOfLasVegas.wav'
+                    name: 'Kremnitze',
+                    path: 'https://media.leosakharoff.com/audio/ambient-electroacustic/Kremnitze.wav'
                 };
 
                 const startAutoplay = () => {
