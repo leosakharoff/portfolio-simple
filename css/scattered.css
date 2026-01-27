@@ -728,20 +728,20 @@ body {
 @media (max-width: 768px) {
     .site-header {
         flex-direction: column;
-        gap: 6px;
+        gap: 4px;
         align-items: flex-start;
-        padding: 15px 20px;
+        padding: 12px 15px;
     }
 
     .header-left {
-        flex-wrap: wrap;
-        gap: 8px;
+        display: flex;
         align-items: center;
+        gap: 8px;
     }
 
     .header-video {
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
     }
 
     .site-title {
@@ -749,16 +749,12 @@ body {
     }
 
     .site-subtitle {
-        width: 100%;
-        margin-left: 40px; /* align with name (video width + gap) */
-        font-size: 10px;
+        display: none;
     }
 
     .header-nav {
-        width: 100%;
-        justify-content: flex-start;
-        gap: 15px;
-        margin-left: 40px;
+        display: flex;
+        gap: 12px;
         font-size: 11px;
     }
 
