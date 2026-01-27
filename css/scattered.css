@@ -67,13 +67,15 @@ body {
 }
 
 .site-title {
-    font-size: 18px;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+    font-size: 14px;
     font-weight: 600;
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
 }
 
 .site-subtitle {
-    font-size: 13px;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+    font-size: 11px;
     color: #666;
 }
 
@@ -81,18 +83,18 @@ body {
     display: flex;
     gap: 20px;
     align-items: center;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+    font-size: 12px;
 }
 
 .cv-link {
     color: var(--text);
     text-decoration: none;
-    font-size: 13px;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.2s;
+    transition: color 0.2s;
 }
 
 .cv-link:hover {
-    border-bottom-color: var(--text);
+    color: teal;
 }
 
 .contact-dropdown {
@@ -102,14 +104,12 @@ body {
 .contact-link {
     color: var(--text);
     text-decoration: none;
-    font-size: 13px;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.2s;
+    transition: color 0.2s;
     cursor: pointer;
 }
 
 .contact-link:hover {
-    border-bottom-color: var(--text);
+    color: teal;
 }
 
 .contact-list {
@@ -136,13 +136,13 @@ body {
 .contact-list a {
     color: #555;
     text-decoration: none;
-    font-size: 13px;
+    font-size: 11px;
     white-space: nowrap;
-    transition: opacity 0.2s;
+    transition: color 0.2s;
 }
 
 .contact-list a:hover {
-    opacity: 0.7;
+    color: teal;
 }
 
 /* Scattered container - full viewport */
@@ -158,10 +158,11 @@ body {
 /* Project words - main clickable items */
 .project-word {
     position: absolute;
-    font-size: 18px;
-    font-weight: 600;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+    font-size: 15px;
+    font-weight: 500;
     cursor: pointer;
-    transition: transform 0.2s, text-shadow 0.2s;
+    transition: color 0.2s;
     white-space: nowrap;
     z-index: 10;
 }
@@ -214,12 +215,13 @@ body {
 /* Context words - smaller decorative words */
 .context-word {
     position: absolute;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
     color: var(--context);
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 400;
     white-space: nowrap;
     pointer-events: none;
-    opacity: 0.7;
+    opacity: 0.5;
 }
 
 /* Hover popup modal */
@@ -237,11 +239,11 @@ body {
 
 .popup-content {
     background: var(--popup-bg);
-    border-radius: 8px;
-    box-shadow: 0 8px 32px var(--shadow), 0 2px 8px rgba(0,0,0,0.1);
+    border: 1px solid #ccc;
     overflow: hidden;
     width: 380px;
     max-width: 90vw;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
 }
 
 .popup-media {
@@ -278,18 +280,26 @@ body {
 }
 
 .popup-info {
-    padding: 20px;
+    padding: 16px;
+    border-top: 1px solid #ddd;
 }
 
 .popup-title {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 600;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.popup-title::before {
+    content: "// ";
+    color: #999;
 }
 
 .popup-description {
-    font-size: 13px;
+    font-size: 11px;
     line-height: 1.6;
     color: #555;
     margin-bottom: 12px;
@@ -298,38 +308,65 @@ body {
 .popup-meta {
     display: flex;
     gap: 16px;
-    margin-bottom: 16px;
-    font-size: 11px;
-    color: #888;
+    margin-bottom: 12px;
+    font-size: 10px;
+    color: #666;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
 }
 
 .popup-tech {
     flex: 1;
 }
 
+.popup-tech::before {
+    content: "tech: ";
+    color: #999;
+}
+
 .popup-year {
     white-space: nowrap;
+}
+
+.popup-year::before {
+    content: "year: ";
+    color: #999;
 }
 
 .popup-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 10px;
+    margin-bottom: 12px;
 }
 
 .popup-link {
     display: inline-block;
-    color: var(--interactive);
+    color: teal;
     text-decoration: none;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 11px;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
     pointer-events: auto;
-    transition: opacity 0.2s;
+    transition: color 0.2s;
+}
+
+.popup-link::before {
+    content: '[';
+    color: #999;
+}
+
+.popup-link::after {
+    content: ']';
+    color: #999;
 }
 
 .popup-link:hover {
-    opacity: 0.7;
+    color: firebrick;
+}
+
+.popup-link:hover::before,
+.popup-link:hover::after {
+    color: firebrick;
 }
 
 /* Audio Player - bracket/monospace aesthetic */
@@ -664,17 +701,18 @@ body {
     display: flex;
     gap: 24px;
     justify-content: center;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+    font-size: 11px;
 }
 
 .footer-links a {
     color: #666;
     text-decoration: none;
-    font-size: 12px;
     transition: color 0.2s;
 }
 
 .footer-links a:hover {
-    color: var(--text);
+    color: teal;
 }
 
 /* Responsive adjustments */
@@ -737,20 +775,9 @@ body {
     }
 }
 
-/* Animation for popup */
-@keyframes popupFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
+/* Popup appears immediately - no animation for functional aesthetic */
 .project-popup.active .popup-content {
-    animation: popupFadeIn 0.2s ease-out;
+    /* No animation - instant appearance */
 }
 
 /* Legend for categories */
@@ -759,36 +786,45 @@ body {
     bottom: 60px;
     left: 30px;
     display: flex;
-    gap: 20px;
+    gap: 16px;
     font-size: 11px;
     z-index: 50;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
 }
 
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 4px;
-    transition: background-color 0.2s, opacity 0.2s;
+    padding: 4px 6px;
+    transition: color 0.2s, opacity 0.2s;
 }
 
 .legend-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    color: teal;
 }
 
 .legend-item.active {
-    background-color: rgba(255, 255, 255, 0.15);
+    color: teal;
 }
 
 .legend-item.dimmed {
     opacity: 0.4;
 }
 
+.legend-bracket {
+    color: #999;
+}
+
+.legend-item:hover .legend-bracket,
+.legend-item.active .legend-bracket {
+    color: teal;
+}
+
 .legend-dot {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
 }
 
@@ -821,22 +857,23 @@ body {
 
 /* Indicator that it's expandable (+ sign) */
 .umbrella-project::after {
-    content: '+';
+    content: '[+]';
     display: inline-block;
     margin-left: 6px;
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 400;
-    opacity: 0.6;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+    color: #999;
+    transition: color 0.3s ease;
 }
 
 .umbrella-project.expanded::after {
-    content: '−';
-    opacity: 1;
+    content: '[−]';
+    color: teal;
 }
 
 .umbrella-project:hover::after {
-    opacity: 1;
+    color: teal;
 }
 
 .umbrella-project.direct-hover,
@@ -858,7 +895,8 @@ body {
 /* Individual sub-project */
 .sub-project {
     position: absolute;
-    font-size: 13px;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+    font-size: 12px;
     font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
@@ -948,7 +986,7 @@ word {
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.2s ease;
 }
 
 .gallery-nav-area:hover {
@@ -957,19 +995,18 @@ word {
 
 .gallery-nav-prev {
     left: 0;
-    background: linear-gradient(to right, rgba(0,0,0,0.3) 0%, transparent 100%);
+    background: linear-gradient(to right, rgba(0,0,0,0.5) 0%, transparent 100%);
 }
 
 .gallery-nav-next {
     right: 0;
-    background: linear-gradient(to left, rgba(0,0,0,0.3) 0%, transparent 100%);
+    background: linear-gradient(to left, rgba(0,0,0,0.5) 0%, transparent 100%);
 }
 
 .gallery-arrow {
     color: white;
-    font-size: 24px;
-    font-weight: bold;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    font-size: 12px;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
     user-select: none;
 }
 
@@ -980,36 +1017,44 @@ word {
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 6px;
+    gap: 4px;
     z-index: 20;
     pointer-events: auto;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.6);
     padding: 4px 8px;
-    border-radius: 10px;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+    font-size: 10px;
 }
 
 .popup-dot {
     display: block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.5);
+    width: auto;
+    height: auto;
+    background: none;
     border: none;
     cursor: pointer;
     padding: 0;
     margin: 0;
-    transition: all 0.2s ease;
+    transition: color 0.2s ease;
     appearance: none;
     -webkit-appearance: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 8px;
+    line-height: 1;
+}
+
+.popup-dot::before {
+    content: "○";
 }
 
 .popup-dot:hover {
-    background-color: rgba(255, 255, 255, 0.9);
-    transform: scale(1.1);
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .popup-dot.active {
-    background-color: #ffffff;
-    transform: scale(1.2);
-    box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+    color: #fff;
+}
+
+.popup-dot.active::before {
+    content: "●";
 }
