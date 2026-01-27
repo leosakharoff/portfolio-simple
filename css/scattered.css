@@ -770,11 +770,16 @@ body {
 }
 
 @media (max-width: 600px) {
+    html, body {
+        overflow: auto !important;
+        height: auto !important;
+    }
+
     .scattered-container {
         position: relative !important;
         height: auto !important;
         min-height: auto !important;
-        overflow-y: auto !important;
+        overflow-y: visible !important;
         display: flex !important;
         flex-direction: column !important;
         gap: 10px !important;
